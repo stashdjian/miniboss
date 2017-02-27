@@ -9,6 +9,7 @@ import {
   AsyncStorage,
   StyleSheet,
   Text,
+  TextInput,
   Image
 } from 'react-native';
 
@@ -30,19 +31,33 @@ export default class account extends Component {
     super(props);
     this.state = {
       loaded: false,
+      userProfile: {nickname:''},
     }
 
   }
 
   componentWillMount(){
-    this.setState({
-      user: Firebase.auth().currentUser,
-      loaded: true
-    });
+    let user = Firebase.auth().currentUser;
+    Firebase.database().ref('/users/' + user.uid).on('value', (snapshot) => {
+      let userProfile = snapshot.val();
+      if (!userProfile) {
+        userProfile = {nickname:''};
+      }
+
+      this.setState({
+        user: Firebase.auth().currentUser,
+        userProfile: userProfile,
+        loaded: true
+      });
+    })
+  }
+
+  update(){
+    var userRef = Firebase.database().ref('users/' + this.state.user.uid);
+    userRef.update({ nickname: this.state.userProfile.nickname });
   }
 
   render(){
-
     return (
       <View style={styles.container}>
         <Header text="Account" loaded={this.state.loaded} />
@@ -60,11 +75,24 @@ export default class account extends Component {
                   source={{uri: this.state.user.photoURL}}
                 />
               }
+              <TextInput
+                style={styles.textinput}
+                onChangeText={(text) => this.setState({userProfile:{nickname: text}})}
+                value={this.state.userProfile.nickname}
+                placeholder={"Nickname"}
+              />
+              <Button
+                  text="Update Profile"
+                  onpress={this.update.bind(this)}
+                  button_styles={styles.primary_button}
+                  button_text_styles={styles.primary_button_text} />
+
               <Button
                   text="Logout"
                   onpress={this.logout.bind(this)}
                   button_styles={styles.primary_button}
                   button_text_styles={styles.primary_button_text} />
+
             </View>
         }
         </View>

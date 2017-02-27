@@ -13,6 +13,7 @@ import {
 
 import Signup from './src/pages/signup';
 import Account from './src/pages/account';
+import Login from './src/pages/login';
 
 import Header from './src/components/header';
 
@@ -43,7 +44,7 @@ class miniboss extends Component {
 
     AsyncStorage.getItem('user_data').then((user_data_json) => {
 
-      let component = {component: Signup};
+      let component = {component: Login};
       let User = Firebase.auth().currentUser;
       if(User){
         this.setState({component: Account});
