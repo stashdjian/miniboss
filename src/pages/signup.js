@@ -7,7 +7,8 @@ import {
   AppRegistry,
   Text,
   TextInput,
-  View
+  View,
+  Image
 } from 'react-native';
 
 
@@ -77,8 +78,11 @@ export default class signup extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header text="Signup" loaded={this.state.loaded} />
+        <Header text="MiniBoss Signup" loaded={this.state.loaded} />
         <View style={styles.body}>
+          <View style={styles.bgImageWrapper}>
+            <Image source={require('../../img/babyboss.jpg')} style={styles.bgImage} />
+          </View>
 
             <TextInput
                 style={styles.textinput}
@@ -86,24 +90,24 @@ export default class signup extends Component {
                 value={this.state.email}
             placeholder={"Email Address"}
             />
-          <TextInput
-            style={styles.textinput}
-            onChangeText={(text) => this.setState({password: text})}
-            value={this.state.password}
-            secureTextEntry={true}
-            placeholder={"Password"}
-          />
-          <Button
-            text="Signup"
-            onpress={this.signup.bind(this)}
-            button_styles={styles.primary_button}
-            button_text_styles={styles.primary_button_text} />
+            <TextInput
+              style={styles.textinput}
+              onChangeText={(text) => this.setState({password: text})}
+              value={this.state.password}
+              secureTextEntry={true}
+              placeholder={"Password"}
+            />
+            <Button
+              text="Signup"
+              onpress={this.signup.bind(this)}
+              button_styles={styles.primary_button}
+              button_text_styles={styles.primary_button_text} />
 
-          <Button
-            text="Got an Account?"
-            onpress={this.goToLogin.bind(this)}
-            button_styles={styles.transparent_button}
-            button_text_styles={styles.transparent_button_text} />
+            <Button
+              text="Got an Account?"
+              onpress={this.goToLogin.bind(this)}
+              button_styles={styles.transparent_button}
+              button_text_styles={styles.transparent_button_text} />
         </View>
       </View>
     );
