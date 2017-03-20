@@ -9,13 +9,15 @@ module.exports = StyleSheet.create({
   },
   body: {
     flex: 9,
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    alignItems: 'stretch',
+    backgroundColor: '#151C1F',
+    padding: 10
   },
   textinput: {
     height: 40,
-    borderColor: 'red',
-    borderWidth: 1
+    marginBottom: 3,
+    marginTop: 3,
+    backgroundColor: '#FFF'
   },
   transparent_button: {
     marginTop: 10,
@@ -26,7 +28,8 @@ module.exports = StyleSheet.create({
     fontSize: 16
   },
   primary_button: {
-    margin: 10,
+    marginBottom: 3,
+    marginTop: 3,
     padding: 15,
     backgroundColor: '#529ecc'
   },
@@ -37,5 +40,17 @@ module.exports = StyleSheet.create({
   image: {
     width: 100,
     height: 100
+  },
+  bgImageWrapper: {
+      position: 'relative',
+      marginRight:10    
+  },
+  bgImage: {
+      resizeMode: "stretch"
+  },
+  welcome: {
+      fontSize: 20,
+      textAlign: 'center',
+      margin: 10
   }
 });

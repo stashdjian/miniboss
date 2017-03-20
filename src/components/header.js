@@ -35,18 +35,18 @@ export default class header extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    padding: 10,
+    padding: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    flex: 1
+    flex: 1,
+    backgroundColor: '#333'
   },
   header_item: {
     paddingLeft: 10,
     paddingRight: 10
   },
   header_text: {
-    color: '#000',
+    color: '#FFF',
     fontSize: 18
   }
 });
