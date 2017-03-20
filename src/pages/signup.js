@@ -80,7 +80,7 @@ export default class signup extends Component {
       <View style={styles.container}>
         <Header text="MiniBoss Signup" loaded={this.state.loaded} />
         <View style={styles.body}>
-          <View style={styles.bgImageWrapper}>
+          <View style={styles.avatarWrapper}>
             <Image source={require('../../img/babyboss.jpg')} style={styles.bgImage} />
           </View>
 

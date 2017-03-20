@@ -23,6 +23,7 @@ import styles from '../styles/common-styles.js';
 
 import Firebase from 'firebase';
 
+var ImagePicker = require('react-native-image-picker');
 
 export default class account extends Component {
 
@@ -68,13 +69,18 @@ export default class account extends Component {
               <View style={page_styles.email_container}>
                 <Text style={page_styles.email_text}>{this.state.user.email}</Text>
               </View>
-              {
-                this.state.user.photoURL &&
-                <Image
-                  style={styles.image}
-                  source={{uri: this.state.user.photoURL}}
-                />
-              }
+                {
+                  this.state.user.photoURL &&
+                  <Image
+                    style={styles.image}
+                    source={{uri: this.state.user.photoURL}}
+                  />
+                }
+              <Button
+                  text="Pick Avatar"
+                  onpress={this._takePicture.bind(this)}
+                  button_styles={styles.primary_button}
+                  button_text_styles={styles.primary_button_text} />
               <TextInput
                 style={styles.textinput}
                 onChangeText={(text) => this.setState({userProfile:{nickname: text}})}
@@ -101,16 +107,40 @@ export default class account extends Component {
   }
 
   logout(){
-
     AsyncStorage.removeItem('user_data').then(() => {
       Firebase.auth().signOut();
       this.props.navigator.push({
         component: Login
       });
     });
-
   }
 
+  _takePicture = () => {
+    var options = {
+      title: 'Select Avatar',
+      storageOptions: {
+        skipBackup: true,
+        path: 'images'
+      }
+    };
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else {
+        let source = { uri: response.uri };
+
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+        this.setState({
+          user: {photoURL: source.uri}
+        });
+      }
+    });
+  }
 }
 
 const page_styles = StyleSheet.create({
