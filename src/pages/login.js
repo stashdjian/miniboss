@@ -18,7 +18,7 @@ import Header from '../components/header';
 import Signup from './signup';
 import Account from './account';
 
-import Firebase from 'firebase';
+import firebase from 'firebase';
 
 import styles from '../styles/common-styles.js';
 
@@ -75,7 +75,7 @@ export default class login extends Component {
       loaded: false
     });
 
-    Firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password).catch( (error) => {
+    firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.password).catch( (error) => {
       alert('Login Failed. Please try again');
     }).then( (user) => {
       this.setState({

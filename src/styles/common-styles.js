@@ -39,11 +39,12 @@ module.exports = StyleSheet.create({
   },
   image: {
     width: 100,
-    height: 100
+    height: 100,
+    resizeMode: 'center'
   },
   bgImageWrapper: {
       position: 'relative',
-      marginRight:10    
+      marginRight:10
   },
   bgImage: {
       resizeMode: "stretch"

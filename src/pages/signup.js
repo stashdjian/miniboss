@@ -19,7 +19,7 @@ import Header from '../components/header';
 
 import Login from './login';
 
-import Firebase from 'firebase';
+import firebase from 'firebase';
 
 
 
@@ -43,7 +43,7 @@ export default class signup extends Component {
       loaded: false
     });
 
-    Firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password).catch( (error) => {
+    firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password).catch( (error) => {
       switch(error.code){
 
         case "EMAIL_TAKEN":
@@ -80,7 +80,7 @@ export default class signup extends Component {
       <View style={styles.container}>
         <Header text="MiniBoss Signup" loaded={this.state.loaded} />
         <View style={styles.body}>
-          <View style={styles.bgImageWrapper}>
+          <View style={styles.avatarWrapper}>
             <Image source={require('../../img/babyboss.jpg')} style={styles.bgImage} />
           </View>
 
