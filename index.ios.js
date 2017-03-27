@@ -17,7 +17,7 @@ import Login from './src/pages/login';
 
 import Header from './src/components/header';
 
-import Firebase from 'firebase';
+import firebase from 'firebase';
 
 var config = {
   apiKey: "AIzaSyAQf6_cTJ6pd18rhlQTEeQY6vRbqqlDCyQ",
@@ -26,7 +26,7 @@ var config = {
   storageBucket: "miniboss-925d5.appspot.com",
   messagingSenderId: "352047977760"
 };
-let app = Firebase.initializeApp(config);
+let app = firebase.initializeApp(config);
 
 import styles from './src/styles/common-styles.js';
 
@@ -45,7 +45,7 @@ class miniboss extends Component {
     AsyncStorage.getItem('user_data').then((user_data_json) => {
 
       let component = {component: Login};
-      let User = Firebase.auth().currentUser;
+      let User = firebase.auth().currentUser;
       if(User){
         this.setState({component: Account});
       }else{

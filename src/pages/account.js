@@ -21,7 +21,9 @@ import Login from './login';
 
 import styles from '../styles/common-styles.js';
 
-import Firebase from 'firebase';
+import firebase from 'firebase';
+
+import RNFetchBlob from 'react-native-fetch-blob';
 
 var ImagePicker = require('react-native-image-picker');
 
@@ -38,23 +40,32 @@ export default class account extends Component {
   }
 
   componentWillMount(){
-    let user = Firebase.auth().currentUser;
-    Firebase.database().ref('/users/' + user.uid).on('value', (snapshot) => {
+    let user = firebase.auth().currentUser;
+    firebase.database().ref('/users/' + user.uid).on('value', (snapshot) => {
       let userProfile = snapshot.val();
       if (!userProfile) {
         userProfile = {nickname:''};
       }
 
       this.setState({
-        user: Firebase.auth().currentUser,
+        user: firebase.auth().currentUser,
         userProfile: userProfile,
         loaded: true
       });
+
+      var imageRef = firebase.storage().ref('avatars').child(this.state.user.uid);
+
+      imageRef.getDownloadURL().then(function(url) {
+        this.setState({
+          user: {photoURL: url}
+        });
+      }.bind(this)).catch((error)=>{console.log(error)});
+
     })
   }
 
   update(){
-    var userRef = Firebase.database().ref('users/' + this.state.user.uid);
+    var userRef = firebase.database().ref('users/' + this.state.user.uid);
     userRef.update({ nickname: this.state.userProfile.nickname });
   }
 
@@ -108,7 +119,7 @@ export default class account extends Component {
 
   logout(){
     AsyncStorage.removeItem('user_data').then(() => {
-      Firebase.auth().signOut();
+      firebase.auth().signOut();
       this.props.navigator.push({
         component: Login
       });
@@ -132,15 +143,45 @@ export default class account extends Component {
       }
       else {
         let source = { uri: response.uri };
-
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-        this.setState({
-          user: {photoURL: source.uri}
+        uploadAvatar(response.uri, this.state.user.uid).then((url)=>{
+          this.setState({
+            user: {photoURL: url}
+          });
         });
       }
     });
   }
+}
+
+const Blob = RNFetchBlob.polyfill.Blob
+const fs = RNFetchBlob.fs
+window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
+const uploadAvatar = (uri, userId, mime = 'image/jpg') => {
+  return new Promise((resolve, reject) => {
+    var platform = 'ios';
+    const uploadUri = platform === 'ios' ? uri.replace('file://', '') : uri
+      let uploadBlob = null
+      const imageRef = firebase.storage().ref('avatars').child(userId)
+      fs.readFile(uploadUri, 'base64')
+      .then((data) => {
+        return Blob.build(data, { type: `${mime};BASE64` })
+      })
+      .then((blob) => {
+        uploadBlob = blob
+        return imageRef.put(blob, { contentType: mime })
+      })
+      .then(() => {
+        uploadBlob.close()
+        return imageRef.getDownloadURL()
+      })
+      .then((url) => {
+        resolve(url)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+  })
 }
 
 const page_styles = StyleSheet.create({
